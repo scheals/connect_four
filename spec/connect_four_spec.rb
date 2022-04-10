@@ -13,7 +13,7 @@ describe Gameboard do
   describe '#initialize' do
     subject(:new_board) { described_class.new }
     it 'stores a 2D array representation of the board in @board' do
-      board_array = Array.new(6) { Array.new(7) { "\u26F6" } }
+      board_array = Array.new(6) { Array.new(7) { '  ' } }
       expect(new_board.instance_variable_get(:@board)).to eq(board_array)
     end
   end
@@ -23,19 +23,19 @@ describe Gameboard do
       subject(:starter_board) { described_class.new }
       it 'outputs a legible representation with no inputs' do
         representiation = "\n    " \
-        "|| \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 ||" \
+        '||    ||    ||    ||    ||    ||    ||    ||' \
           "\n    " \
-          "|| \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 ||" \
+          '||    ||    ||    ||    ||    ||    ||    ||' \
           "\n    " \
-          "|| \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 ||" \
+          '||    ||    ||    ||    ||    ||    ||    ||' \
           "\n    " \
-          "|| \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 ||" \
+          '||    ||    ||    ||    ||    ||    ||    ||' \
           "\n    " \
-          "|| \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 ||" \
+          '||    ||    ||    ||    ||    ||    ||    ||' \
           "\n    " \
-          "|| \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 || \u26F6 ||" \
+          '||    ||    ||    ||    ||    ||    ||    ||' \
           "\n    " \
-          "\u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C" \
+          " \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C" \
           "\n\n"
         expect(starter_board).to receive(:puts).with(representiation)
         starter_board.show
@@ -68,6 +68,25 @@ describe Gameboard do
       end
       after do
         drop_onto_tokens.show
+      end
+    end
+  end
+
+  describe '#win?' do
+    context 'when there are four same colour tokens in a row' do
+      subject(:row_win) { described_class.new }
+      before do
+        white_token = "\u26AB"
+        row_win.drop(white_token, 1)
+        row_win.drop(white_token, 2)
+        row_win.drop(white_token, 3)
+        row_win.drop(white_token, 4)
+      end
+      it 'returns true' do
+        expect(row_win.win?).to be(true)
+      end
+      after do
+        row_win.show
       end
     end
   end

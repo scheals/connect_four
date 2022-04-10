@@ -3,7 +3,7 @@
 # This is a class that handles a Connect Four gameboard with its rules.
 class Gameboard
   def initialize
-    @board = Array.new(6) { Array.new(7) { "\u26F6" } }
+    @board = Array.new(6) { Array.new(7) { '  ' } }
   end
 
   # rubocop: disable Metrics/AbcSize
@@ -16,7 +16,7 @@ class Gameboard
     || #{third_row[0]} || #{third_row[1]} || #{third_row[2]} || #{third_row[3]} || #{third_row[4]} || #{third_row[5]} || #{third_row[6]} ||
     || #{second_row[0]} || #{second_row[1]} || #{second_row[2]} || #{second_row[3]} || #{second_row[4]} || #{second_row[5]} || #{second_row[6]} ||
     || #{first_row[0]} || #{first_row[1]} || #{first_row[2]} || #{first_row[3]} || #{first_row[4]} || #{first_row[5]} || #{first_row[6]} ||
-    \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C
+     \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C
 
     HEREDOC
   end
@@ -28,6 +28,14 @@ class Gameboard
     return first_row[column - 1] = token unless last_token
 
     @board[last_token - 1][column - 1] = token
+  end
+
+  def win?
+    case @board
+      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
+      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+    end
+    false
   end
 
   private
