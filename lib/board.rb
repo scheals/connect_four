@@ -22,6 +22,16 @@ class Gameboard
   end
   # rubocop: enable Metrics/AbcSize
 
+  def drop(token, column)
+    target_column = @board.transpose[column - 1]
+    last_token = target_column.index { |space| space == "\u26AA" || space == "\u26AB" }
+    return first_row[column - 1] = token unless last_token
+
+    @board[last_token - 1][column - 1] = token
+  end
+
+  private
+
   def first_row
     @board[5]
   end
