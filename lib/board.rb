@@ -27,6 +27,8 @@ class Gameboard
     last_token = target_column.index { |space| space == "\u26AA" || space == "\u26AB" }
     return first_row[column - 1] = token unless last_token
 
+    return nil if last_token == 0
+
     @board[last_token - 1][column - 1] = token
   end
 
