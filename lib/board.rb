@@ -42,8 +42,8 @@ class Gameboard
     diagonals = []
     sixth_row.each_index do |index|
       diagonals << [[sixth_row[index]], [sixth_row[index]]]
-      diagonals[index][0] = right_left_diagonals(index)
-      diagonals[index][1] = left_right_diagonals(index)
+      diagonals[index][0] += right_left_diagonals(index)
+      diagonals[index][1] += left_right_diagonals(index)
     end
     diagonals
   end
@@ -52,7 +52,7 @@ class Gameboard
     diagonals = []
     next_row = 1
     next_column = index + 1
-    until next_column > 5 || next_row > 5
+    until next_column > 6 || next_row > 5
       diagonals << @board[next_row][next_column]
       next_row += 1
       next_column += 1
