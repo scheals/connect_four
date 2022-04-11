@@ -36,6 +36,10 @@ class Gameboard
     four_in_a_row? || four_in_a_column? || four_in_a_diagonal?
   end
 
+  def tie?
+    @board.reject { |row| row.all? { |space| space == "\u26AA" || space == "\u26AB" } }.empty?
+  end
+
   private
 
   def create_diagonals

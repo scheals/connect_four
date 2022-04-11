@@ -142,5 +142,35 @@ describe Gameboard do
       end
     end
   end
+
+  describe '#tie?' do
+    context 'when every single space is filled' do
+      subject(:board_tie) {described_class.new }
+      before do
+        white_token = "\u26AB"
+        black_token = "\u26AA"
+        3.times { board_tie.drop(white_token, 1) }
+        3.times { board_tie.drop(black_token, 1) }
+        3.times { board_tie.drop(black_token, 2) }
+        3.times { board_tie.drop(white_token, 2) }
+        3.times { board_tie.drop(white_token, 3) }
+        3.times { board_tie.drop(black_token, 3) }
+        3.times { board_tie.drop(black_token, 4) }
+        3.times { board_tie.drop(white_token, 4) }
+        3.times { board_tie.drop(white_token, 5) }
+        3.times { board_tie.drop(black_token, 5) }
+        3.times { board_tie.drop(black_token, 6) }
+        3.times { board_tie.drop(white_token, 6) }
+        3.times { board_tie.drop(white_token, 7) }
+        3.times { board_tie.drop(black_token, 7) }
+      end
+      it 'returns true' do
+        expect(board_tie.tie?).to be(true)
+      end
+      after do
+        board_tie.show
+      end
+    end
+  end
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength
