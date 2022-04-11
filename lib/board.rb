@@ -32,21 +32,56 @@ class Gameboard
     @board[last_token - 1][column - 1] = token
   end
 
+  # rubocop: disable Lint/Syntax
   def win?
     case @board
       in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
       in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
-    else nil
+      else nil
     end
     case @board.transpose
       in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
       in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
-    else nil
+      else nil
     end
+    return check_diagonals
     false
   end
 
-  private
+  def check_diagonals
+    diagonals = create_diagonals
+    case diagonals
+      in [*, [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *], *] then return true
+      in [*, [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *], *] then return true
+      else nil
+    end
+    false
+    end
+# rubocop: enable Lint/Syntax
+
+  # private
+
+  def create_diagonals
+    diagonals = []
+    sixth_row.each_index do |index|
+      diagonals << [[sixth_row[index]], [sixth_row[index]]]
+      next_row = 1
+      next_column = index - 1
+      until next_column < 0 || next_row > 5
+        diagonals[index][0] << @board[next_row][next_column]
+        next_row += 1
+        next_column -= 1
+      end
+      next_row = 1
+      next_column = index + 1
+      until next_column > 5 || next_row > 5
+        diagonals[index][1] << @board[next_row][next_column]
+        next_row += 1
+        next_column += 1
+      end
+    end
+    diagonals
+  end
 
   def first_row
     @board[5]
@@ -72,3 +107,5 @@ class Gameboard
     @board[0]
   end
 end
+
+Gameboard.new.create_diagonals

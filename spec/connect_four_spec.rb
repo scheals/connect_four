@@ -108,7 +108,7 @@ describe Gameboard do
     context 'when there are four same colour tokens in a column' do
       subject(:column_win) { described_class.new }
       before do
-        black_token = "\u26AB"
+        black_token = "\u26AA"
         column_win.drop(black_token, 1)
         column_win.drop(black_token, 1)
         column_win.drop(black_token, 1)
@@ -119,6 +119,26 @@ describe Gameboard do
       end
       after do
         column_win.show
+      end
+    end
+    context 'when there are four same colour tokens in a diagonal' do
+      subject(:diagonal_win) { described_class.new }
+      before do
+        white_token = "\u26AB"
+        black_token = "\u26AA"
+        diagonal_win.drop(white_token, 2)
+        2.times { diagonal_win.drop(white_token, 3) }
+        3.times { diagonal_win.drop(white_token, 4) }
+        diagonal_win.drop(black_token, 1)
+        diagonal_win.drop(black_token, 2)
+        diagonal_win.drop(black_token, 3)
+        diagonal_win.drop(black_token, 4)
+      end
+      it 'returns true' do
+        expect(diagonal_win.win?).to be(true)
+      end
+      after do
+        diagonal_win.show
       end
     end
   end
