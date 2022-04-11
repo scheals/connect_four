@@ -105,6 +105,22 @@ describe Gameboard do
         row_win.show
       end
     end
+    context 'when there are four same colour tokens in a column' do
+      subject(:column_win) { described_class.new }
+      before do
+        black_token = "\u26AB"
+        column_win.drop(black_token, 1)
+        column_win.drop(black_token, 1)
+        column_win.drop(black_token, 1)
+        column_win.drop(black_token, 1)
+      end
+      it 'returns true' do
+        expect(column_win.win?).to be(true)
+      end
+      after do
+        column_win.show
+      end
+    end
   end
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength

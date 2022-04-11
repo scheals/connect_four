@@ -36,6 +36,12 @@ class Gameboard
     case @board
       in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
       in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+    else nil
+    end
+    case @board.transpose
+      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
+      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+    else nil
     end
     false
   end
