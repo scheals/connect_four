@@ -6,7 +6,7 @@ class Gameboard
     @board = Array.new(6) { Array.new(7) { '  ' } }
   end
 
-  # rubocop: disable Metrics/AbcSize
+ # rubocop: disable Metrics/AbcSize
   def show
     puts <<-HEREDOC
 
@@ -20,7 +20,7 @@ class Gameboard
 
     HEREDOC
   end
-  # rubocop: enable Metrics/AbcSize
+ # rubocop: enable Metrics/AbcSize
 
   def drop(token, column)
     target_column = @board.transpose[column - 1]
@@ -32,56 +32,73 @@ class Gameboard
     @board[last_token - 1][column - 1] = token
   end
 
-  # rubocop: disable Lint/Syntax
   def win?
-    case @board
-      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
-      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
-      else nil
-    end
-    case @board.transpose
-      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
-      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
-      else nil
-    end
-    return check_diagonals
-    false
+    four_in_a_row? || four_in_a_column? || four_in_a_diagonal?
   end
 
-  def check_diagonals
-    diagonals = create_diagonals
-    case diagonals
-      in [*, [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *], *] then return true
-      in [*, [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *], *] then return true
-      else nil
-    end
-    false
-    end
-# rubocop: enable Lint/Syntax
-
-  # private
+  private
 
   def create_diagonals
     diagonals = []
     sixth_row.each_index do |index|
       diagonals << [[sixth_row[index]], [sixth_row[index]]]
-      next_row = 1
-      next_column = index - 1
-      until next_column < 0 || next_row > 5
-        diagonals[index][0] << @board[next_row][next_column]
-        next_row += 1
-        next_column -= 1
-      end
-      next_row = 1
-      next_column = index + 1
-      until next_column > 5 || next_row > 5
-        diagonals[index][1] << @board[next_row][next_column]
-        next_row += 1
-        next_column += 1
-      end
+      diagonals[index][0] = right_left_diagonals(index)
+      diagonals[index][1] = left_right_diagonals(index)
     end
     diagonals
   end
+
+  def left_right_diagonals(index)
+    diagonals = []
+    next_row = 1
+    next_column = index + 1
+    until next_column > 5 || next_row > 5
+      diagonals << @board[next_row][next_column]
+      next_row += 1
+      next_column += 1
+    end
+    diagonals
+  end
+
+  def right_left_diagonals(index)
+    diagonals = []
+    next_row = 1
+    next_column = index - 1
+    until next_column < 0 || next_row > 5
+      diagonals << @board[next_row][next_column]
+      next_row += 1
+      next_column -= 1
+    end
+    diagonals
+  end
+
+  # rubocop: disable Lint/Syntax
+  def four_in_a_row?
+    case @board
+      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
+      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+      else false
+    end
+  end
+
+  def four_in_a_column?
+    case @board.transpose
+      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
+      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+      else false
+    end
+  end
+
+  def four_in_a_diagonal?
+    diagonals = create_diagonals
+    case diagonals
+      in [*, [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *], *] then return true
+      in [*, [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *], *] then return true
+      else false
+    end
+    false
+    end
+# rubocop: enable Lint/Syntax
 
   def first_row
     @board[5]
@@ -107,5 +124,3 @@ class Gameboard
     @board[0]
   end
 end
-
-Gameboard.new.create_diagonals
