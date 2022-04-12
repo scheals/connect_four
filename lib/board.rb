@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # This is a class that handles a Connect Four gameboard with its rules.
-class Gameboard
+class Board
   def initialize
     @board = Array.new(6) { Array.new(7) { '  ' } }
   end

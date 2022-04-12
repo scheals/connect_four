@@ -4,8 +4,9 @@
 
 require_relative '../lib/board'
 require_relative '../lib/player'
+require_relative '../lib/game'
 
-describe Gameboard do
+describe Board do
   describe '#initialize' do
     subject(:new_board) { described_class.new }
     it 'stores a 2D array representation of the board in @board' do
@@ -141,7 +142,7 @@ describe Gameboard do
 
   describe '#tie?' do
     context 'when every single space is filled' do
-      subject(:board_tie) {described_class.new }
+      subject(:board_tie) { described_class.new }
       before do
         white_token = "\u26AB"
         black_token = "\u26AA"
@@ -171,7 +172,7 @@ describe Gameboard do
 end
 
 describe Player do
-  subject(:new_player) { described_class.new('Peter', "\u26AA")}
+  subject(:new_player) { described_class.new('Peter', "\u26AA") }
   describe '#initialize' do
     it 'creates a player with a name' do
       expect(new_player.name).to be('Peter')
