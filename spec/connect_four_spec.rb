@@ -3,11 +3,7 @@
 # rubocop: disable Layout/LineLength, Metrics/BlockLength
 
 require_relative '../lib/board'
-
-# is a two-player connection board game, in which the players choose a color and
-# then take turns dropping colored tokens into a seven-columnstarter_board., six-row vertically suspended grid.
-# The pieces fall straight down, occupying the lowest available space within the column.
-# The objective of the game is to be the first to form a horizontal, vertical, or diagonal line of four of one's own tokens.
+require_relative '../lib/player'
 
 describe Gameboard do
   describe '#initialize' do
@@ -170,6 +166,18 @@ describe Gameboard do
       after do
         board_tie.show
       end
+    end
+  end
+end
+
+describe Player do
+  subject(:new_player) { described_class.new('Peter', "\u26AA")}
+  describe '#initialize' do
+    it 'creates a player with a name' do
+      expect(new_player.name).to be('Peter')
+    end
+    it 'creates a player with a token' do
+      expect(new_player.token).to be("\u26AA")
     end
   end
 end
