@@ -5,6 +5,7 @@
 require_relative '../lib/board'
 require_relative '../lib/player'
 require_relative '../lib/game'
+require_relative '../lib/gamedriver'
 
 describe Board do
   describe '#initialize' do
@@ -181,5 +182,24 @@ describe Player do
       expect(new_player.token).to be("\u26AA")
     end
   end
+end
+
+describe GameDriver do
+  describe '#create_player' do
+    subject(:new_player) { described_class }
+    it 'creates a player with a name and a token' do
+      expect(new_player.create_player('Nadia', "\u26AB")).to have_attributes(name: 'Nadia', token: "\u26AB")
+    end
+  end
+
+  describe '#create_board' do
+    subject(:new_board) { described_class }
+    it 'creates a suitable board' do
+      expect(new_board.create_board).to respond_to(:show, :drop, :win?, :tie?)
+    end
+  end
+end
+
+describe Game do
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength
