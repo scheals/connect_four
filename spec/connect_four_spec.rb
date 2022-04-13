@@ -240,7 +240,7 @@ describe Game do
       let(:player2) { Player.new('Aftab', "\u26AA") }
       before do
         allow(input_thrice).to receive(:gets).and_return('11', '0', '7')
-        allow(input_thrice).to receive(:puts).twice
+        allow(input_thrice).to receive(:puts).exactly(5).times
       end
       it 'prints an error to the console twice and ends loop' do
         error_message = 'Column not found. Proper columns start at 1 and end at 7.'

@@ -27,6 +27,7 @@ class Game
   end
 
   def which_column
+    puts 'Which column do you want to drop token into?'
     column = gets.chomp.to_i
     return column if (1..7).include?(column)
 
