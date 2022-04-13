@@ -208,5 +208,16 @@ describe Game do
       expect { game_move.make_move(column) }.to change { game_move.board.send(:first_row).first }
     end
   end
+  describe '#switch_players' do
+    subject(:game_switch) { described_class.new(player1, player2, Board.new) }
+    let(:player1) { Player.new('Shohreh', "\u26AB") }
+    let(:player2) { Player.new('Setareh', "\u26AA") }
+    before do
+      game_switch.instance_variable_set(:@current_player, player2)
+    end
+    it 'changes current_player to the other player' do
+      expect { game_switch.switch_players }.to change { game_switch.current_player }
+    end
+  end
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength
