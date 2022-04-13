@@ -27,9 +27,9 @@ class Game
   end
 
   def which_column
-    puts 'Which column do you want to drop token into?'
+    puts "#{current_player}, which column do you want to drop token into?"
     column = gets.chomp.to_i
-    return column if (1..7).include?(column)
+    return column if board.valid_column?(column)
 
     puts 'Column not found. Proper columns start at 1 and end at 7.'
     which_column

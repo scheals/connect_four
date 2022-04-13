@@ -68,22 +68,6 @@ describe Board do
         drop_onto_tokens.show
       end
     end
-    context 'when column is full' do
-      subject(:drop_onto_full) { described_class.new }
-      before do
-        drop_onto_full.send(:first_row)[0] = "\u26AA"
-        drop_onto_full.send(:second_row)[0] = "\u26AB"
-        drop_onto_full.send(:third_row)[0] = "\u26AB"
-        drop_onto_full.send(:fourth_row)[0] = "\u26AA"
-        drop_onto_full.send(:fifth_row)[0] = "\u26AA"
-        drop_onto_full.send(:sixth_row)[0] = "\u26AB"
-      end
-      it 'returns nil' do
-        black_token = "\u26AA"
-        column = 1
-        expect(drop_onto_full.drop(black_token, column)).to be(nil)
-      end
-    end
   end
 
   describe '#win?' do
@@ -195,7 +179,7 @@ describe GameDriver do
   describe '#create_board' do
     subject(:new_board) { described_class }
     it 'creates a suitable board' do
-      expect(new_board.create_board).to respond_to(:show, :drop, :win?, :tie?)
+      expect(new_board.create_board).to respond_to(:show, :drop, :win?, :tie?, :valid_column?)
     end
   end
 end
@@ -228,6 +212,7 @@ describe Game do
       let(:player2) { Player.new('Behrouz', "\u26AA") }
       before do
         allow(valid_column).to receive(:gets).and_return('3')
+        allow(valid_column).to receive(:puts)
       end
       it 'returns a number' do
         valid_input = 3

@@ -3,7 +3,7 @@
 # This is a class that handles a Connect Four gameboard with its rules.
 class Board
   attr_reader :board
-  
+
   def initialize
     @board = Array.new(6) { Array.new(7) { '  ' } }
   end
@@ -25,11 +25,9 @@ class Board
  # rubocop: enable Metrics/AbcSize
 
   def drop(token, column)
-    target_column = board.transpose[column - 1]
-    last_token = target_column.index { |space| space == "\u26AA" || space == "\u26AB" }
+    target_column = find_column(column)
+    last_token = topmost_token(target_column)
     return first_row[column - 1] = token unless last_token
-
-    return nil if last_token == 0
 
     board[last_token - 1][column - 1] = token
   end
@@ -42,7 +40,27 @@ class Board
     board.reject { |row| row.all? { |space| space == "\u26AA" || space == "\u26AB" } }.empty?
   end
 
+  def valid_column?(column)
+    return true if (1..7).include?(column) && !full?(column)
+
+    false
+  end
+
   private
+
+  def find_column(column)
+    board.transpose[column - 1]
+  end
+
+  def topmost_token(column)
+    column.index { |space| space == "\u26AA" || space == "\u26AB" }
+  end
+
+  def full?(column)
+    return true if topmost_token(find_column(column)) == 0
+
+    false
+  end
 
   def create_diagonals
     diagonals = []
