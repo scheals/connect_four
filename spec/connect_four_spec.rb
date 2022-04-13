@@ -208,6 +208,7 @@ describe Game do
       expect { game_move.make_move(column) }.to change { game_move.board.send(:first_row).first }
     end
   end
+
   describe '#switch_players' do
     subject(:game_switch) { described_class.new(player1, player2, Board.new) }
     let(:player1) { Player.new('Shohreh', "\u26AB") }
@@ -217,6 +218,35 @@ describe Game do
     end
     it 'changes current_player to the other player' do
       expect { game_switch.switch_players }.to change { game_switch.current_player }
+    end
+  end
+
+  describe '#which_column' do
+    context 'when input is valid' do
+      subject(:valid_column) { described_class.new(player1, player2, Board.new) }
+      let(:player1) { Player.new('Jahan', "\u26AB") }
+      let(:player2) { Player.new('Behrouz', "\u26AA") }
+      before do
+        allow(valid_column).to receive(:gets).and_return('3')
+      end
+      it 'returns a number' do
+        valid_input = 3
+        expect(valid_column.which_column).to be(valid_input)
+      end
+    end
+    context 'when input is invalid twice and then valid' do
+      subject(:input_thrice) { described_class.new(player1, player2, Board.new) }
+      let(:player1) { Player.new('Farid', "\u26AB") }
+      let(:player2) { Player.new('Aftab', "\u26AA") }
+      before do
+        allow(input_thrice).to receive(:gets).and_return('11', '0', '7')
+        allow(input_thrice).to receive(:puts).twice
+      end
+      it 'prints an error to the console twice and ends loop' do
+        error_message = 'Column not found. Proper columns start at 1 and end at 7.'
+        expect(input_thrice).to receive(:puts).with(error_message).twice
+        input_thrice.which_column
+      end
     end
   end
 end

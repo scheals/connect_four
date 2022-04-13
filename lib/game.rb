@@ -25,4 +25,12 @@ class Game
                         first_player
                       end
   end
+
+  def which_column
+    column = gets.chomp.to_i
+    return column if (1..7).include?(column)
+
+    puts 'Column not found. Proper columns start at 1 and end at 7.'
+    which_column
+  end
 end
