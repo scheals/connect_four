@@ -201,5 +201,12 @@ describe GameDriver do
 end
 
 describe Game do
+  describe '#make_move' do
+    subject(:game_move) { described_class.new(Player.new('Shohreh', "\u26AB"), Player.new('Setareh', "\u26AA"), Board.new) }
+    it 'places one token' do
+      column = 1
+      expect { game_move.make_move(column) }.to change { game_move.board.send(:first_row).first }
+    end
+  end
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength
