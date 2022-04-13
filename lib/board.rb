@@ -2,6 +2,8 @@
 
 # This is a class that handles a Connect Four gameboard with its rules.
 class Board
+  attr_reader :board
+  
   def initialize
     @board = Array.new(6) { Array.new(7) { '  ' } }
   end
@@ -23,13 +25,13 @@ class Board
  # rubocop: enable Metrics/AbcSize
 
   def drop(token, column)
-    target_column = @board.transpose[column - 1]
+    target_column = board.transpose[column - 1]
     last_token = target_column.index { |space| space == "\u26AA" || space == "\u26AB" }
     return first_row[column - 1] = token unless last_token
 
     return nil if last_token == 0
 
-    @board[last_token - 1][column - 1] = token
+    board[last_token - 1][column - 1] = token
   end
 
   def win?
@@ -37,7 +39,7 @@ class Board
   end
 
   def tie?
-    @board.reject { |row| row.all? { |space| space == "\u26AA" || space == "\u26AB" } }.empty?
+    board.reject { |row| row.all? { |space| space == "\u26AA" || space == "\u26AB" } }.empty?
   end
 
   private
@@ -57,7 +59,7 @@ class Board
     next_row = 1
     next_column = index + 1
     until next_column > 6 || next_row > 5
-      diagonals << @board[next_row][next_column]
+      diagonals << board[next_row][next_column]
       next_row += 1
       next_column += 1
     end
@@ -69,7 +71,7 @@ class Board
     next_row = 1
     next_column = index - 1
     until next_column < 0 || next_row > 5
-      diagonals << @board[next_row][next_column]
+      diagonals << board[next_row][next_column]
       next_row += 1
       next_column -= 1
     end
@@ -78,7 +80,7 @@ class Board
 
   # rubocop: disable Lint/Syntax
   def four_in_a_row?
-    case @board
+    case board
       in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
       in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
       else false
@@ -86,7 +88,7 @@ class Board
   end
 
   def four_in_a_column?
-    case @board.transpose
+    case board.transpose
       in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
       in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
       else false
@@ -105,26 +107,26 @@ class Board
 # rubocop: enable Lint/Syntax
 
   def first_row
-    @board[5]
+    board[5]
   end
 
   def second_row
-    @board[4]
+    board[4]
   end
 
   def third_row
-    @board[3]
+    board[3]
   end
 
   def fourth_row
-    @board[2]
+    board[2]
   end
 
   def fifth_row
-    @board[1]
+    board[1]
   end
 
   def sixth_row
-    @board[0]
+    board[0]
   end
 end
