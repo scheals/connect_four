@@ -14,6 +14,18 @@ class Game
     @current_player = first_player
   end
 
+  def game_loop
+    loop do
+      puts 'This is how the board looks like:'
+      board.show
+      make_move(which_column)
+      break if game_over?
+
+      switch_players
+    end
+    puts "Thanks for playing, #{first_player.name} and #{second_player.name}!"
+  end
+
   def make_move(column)
     board.drop(current_player.token, column)
   end
@@ -27,11 +39,33 @@ class Game
   end
 
   def which_column
-    puts "#{current_player}, which column do you want to drop token into?"
+    puts "#{current_player.name}, which column do you want to drop token into?"
     column = gets.chomp.to_i
     return column if board.valid_column?(column)
 
     puts 'Column not found. Proper columns start at 1 and end at 7.'
     which_column
+  end
+
+  def win
+    board.show
+    puts "You did it #{current_player.name}! You won!"
+  end
+
+  def tie
+    board.show
+    puts 'That was a long one! You have tied.'
+  end
+
+  def game_over?
+    if board.win?
+      win
+      true
+    elsif board.tie?
+      tie
+      true
+    else
+      false
+    end
   end
 end

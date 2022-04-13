@@ -234,5 +234,44 @@ describe Game do
       end
     end
   end
+
+  describe '#game_loop' do
+    context 'when the game is won' do
+      subject(:game_won) { described_class.new(player1, player2, board) }
+      let(:player1) { Player.new('Anahita', "\u26AB") }
+      let(:player2) { Player.new('Farahnaz', "\u26AA") }
+      let(:board) { Board.new }
+      before do
+        allow(board).to receive(:win?).and_return(true).once
+        allow(board).to receive(:show)
+        allow(game_won).to receive(:puts)
+        allow(game_won).to receive(:make_move)
+        allow(game_won).to receive(:which_column)
+      end
+      it 'stops and displays a message' do
+        congratulations = "You did it #{game_won.current_player.name}! You won!"
+        expect(game_won).to receive(:puts).with(congratulations).once
+        game_won.game_loop
+      end
+    end
+    context 'when the game is tied' do
+      subject(:game_tied) { described_class.new(player1, player2, board) }
+      let(:player1) { Player.new('Anahita', "\u26AB") }
+      let(:player2) { Player.new('Farahnaz', "\u26AA") }
+      let(:board) { Board.new }
+      before do
+        allow(board).to receive(:tie?).and_return(true).once
+        allow(board).to receive(:show)
+        allow(game_tied).to receive(:puts)
+        allow(game_tied).to receive(:make_move)
+        allow(game_tied).to receive(:which_column)
+      end
+      it 'stops and displays a message' do
+        message = 'That was a long one! You have tied.'
+        expect(game_tied).to receive(:puts).with(message).once
+        game_tied.game_loop
+      end
+    end
+  end
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength
