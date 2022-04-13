@@ -64,16 +64,32 @@ class Board
   end
 
   def create_diagonals
+    bottom_diagonals = create_bottom_diagonals
+    top_diagonals = create_top_diagonals
+    top_diagonals + bottom_diagonals
+  end
+
+  def create_top_diagonals
     diagonals = []
     sixth_row.each_index do |index|
       diagonals << [[sixth_row[index]], [sixth_row[index]]]
-      diagonals[index][0] += right_left_diagonals(index)
-      diagonals[index][1] += left_right_diagonals(index)
+      diagonals[index][0] += top_right_left_diagonals(index)
+      diagonals[index][1] += top_left_right_diagonals(index)
     end
     diagonals
   end
 
-  def left_right_diagonals(index)
+  def create_bottom_diagonals
+    diagonals = []
+    first_row.each_index do |index|
+      diagonals << [[first_row[index]], [first_row[index]]]
+      diagonals[index][0] += bottom_right_left_diagonals(index)
+      diagonals[index][1] += bottom_left_right_diagonals(index)
+    end
+    diagonals
+  end
+
+  def top_left_right_diagonals(index)
     diagonals = []
     next_row = 1
     next_column = index + 1
@@ -85,13 +101,37 @@ class Board
     diagonals
   end
 
-  def right_left_diagonals(index)
+  def top_right_left_diagonals(index)
     diagonals = []
     next_row = 1
     next_column = index - 1
     until next_column < 0 || next_row > 5
       diagonals << board[next_row][next_column]
       next_row += 1
+      next_column -= 1
+    end
+    diagonals
+  end
+
+  def bottom_left_right_diagonals(index)
+    diagonals = []
+    next_row = 4
+    next_column = index + 1
+    until next_column > 6 || next_row < 0
+      diagonals << board[next_row][next_column]
+      next_row -= 1
+      next_column += 1
+    end
+    diagonals
+  end
+
+  def bottom_right_left_diagonals(index)
+    diagonals = []
+    next_row = 4
+    next_column = index - 1
+    until next_column < 0 || next_row < 0
+      diagonals << board[next_row][next_column]
+      next_row -= 1
       next_column -= 1
     end
     diagonals

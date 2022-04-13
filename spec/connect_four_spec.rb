@@ -78,24 +78,44 @@ describe Board do
         column_win.show
       end
     end
-    context 'when there are four same colour tokens in a diagonal' do
-      subject(:diagonal_win) { described_class.new }
+    context 'when there are four same colour tokens in a diagonal that comes from the top' do
+      subject(:top_diagonal_win) { described_class.new }
       before do
         white_token = "\u26AB"
         black_token = "\u26AA"
-        diagonal_win.drop(white_token, 2)
-        2.times { diagonal_win.drop(white_token, 3) }
-        3.times { diagonal_win.drop(white_token, 4) }
-        diagonal_win.drop(black_token, 1)
-        diagonal_win.drop(black_token, 2)
-        diagonal_win.drop(black_token, 3)
-        diagonal_win.drop(black_token, 4)
+        top_diagonal_win.drop(white_token, 2)
+        2.times { top_diagonal_win.drop(white_token, 3) }
+        3.times { top_diagonal_win.drop(white_token, 4) }
+        top_diagonal_win.drop(black_token, 1)
+        top_diagonal_win.drop(black_token, 2)
+        top_diagonal_win.drop(black_token, 3)
+        top_diagonal_win.drop(black_token, 4)
       end
       it 'returns true' do
-        expect(diagonal_win.win?).to be(true)
+        expect(top_diagonal_win.win?).to be(true)
       end
       after do
-        diagonal_win.show
+        top_diagonal_win.show
+      end
+    end
+    context 'when there are four same colour tokens in a diagonal that comes from the bottom' do
+      subject(:bottom_diagonal_win) { described_class.new }
+      before do
+        white_token = "\u26AB"
+        black_token = "\u26AA"
+        bottom_diagonal_win.drop(white_token, 5)
+        2.times { bottom_diagonal_win.drop(white_token, 6) }
+        3.times { bottom_diagonal_win.drop(white_token, 7) }
+        bottom_diagonal_win.drop(black_token, 4)
+        bottom_diagonal_win.drop(black_token, 5)
+        bottom_diagonal_win.drop(black_token, 6)
+        bottom_diagonal_win.drop(black_token, 7)
+      end
+      it 'returns true' do
+        expect(bottom_diagonal_win.win?).to be(true)
+      end
+      after do
+        bottom_diagonal_win.show
       end
     end
   end
