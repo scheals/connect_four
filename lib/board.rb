@@ -11,6 +11,7 @@ class Board
  # rubocop: disable Metrics/AbcSize
   def show
     puts <<-HEREDOC
+       1     2     3     4     5     6     7
 
     || #{sixth_row[0]} || #{sixth_row[1]} || #{sixth_row[2]} || #{sixth_row[3]} || #{sixth_row[4]} || #{sixth_row[5]} || #{sixth_row[6]} ||
     || #{fifth_row[0]} || #{fifth_row[1]} || #{fifth_row[2]} || #{fifth_row[3]} || #{fifth_row[4]} || #{fifth_row[5]} || #{fifth_row[6]} ||

@@ -16,31 +16,6 @@ describe Board do
     end
   end
 
-  describe '#show' do
-    context 'when a new board is created' do
-      subject(:starter_board) { described_class.new }
-      it 'outputs a legible representation with no inputs' do
-        representiation = "\n    " \
-        '||    ||    ||    ||    ||    ||    ||    ||' \
-          "\n    " \
-          '||    ||    ||    ||    ||    ||    ||    ||' \
-          "\n    " \
-          '||    ||    ||    ||    ||    ||    ||    ||' \
-          "\n    " \
-          '||    ||    ||    ||    ||    ||    ||    ||' \
-          "\n    " \
-          '||    ||    ||    ||    ||    ||    ||    ||' \
-          "\n    " \
-          '||    ||    ||    ||    ||    ||    ||    ||' \
-          "\n    " \
-          " \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C \u268C" \
-          "\n\n"
-        expect(starter_board).to receive(:puts).with(representiation)
-        starter_board.show
-      end
-    end
-  end
-
   describe '#drop_token' do
     context 'when column is empty' do
       subject(:drop_into_empty) { described_class.new }
@@ -228,7 +203,7 @@ describe Game do
         allow(input_thrice).to receive(:puts).exactly(5).times
       end
       it 'prints an error to the console twice and ends loop' do
-        error_message = 'Column not found. Proper columns start at 1 and end at 7.'
+        error_message = 'Column not found or full. Proper columns start at 1 and end at 7.'
         expect(input_thrice).to receive(:puts).with(error_message).twice
         input_thrice.which_column
       end
