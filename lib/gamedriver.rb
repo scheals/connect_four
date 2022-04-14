@@ -43,9 +43,9 @@ class GameDriver
     - a diagonal, e.g.:
 
     \u26AB
-    \u26AB
-    \u26AB
-    \u26AB
+    \s\u26AB
+    \s\s\u26AB
+    \s\s\s\u26AB
 
     You achieve this by dropping tokens from the top of the column to the first free space on its way down.
     If all spaces are occupied but no one has won it is a tie.
