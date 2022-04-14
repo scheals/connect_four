@@ -268,5 +268,48 @@ describe Game do
       end
     end
   end
+
+  describe '#game_over?' do
+    context 'when the game is won' do
+      subject(:game_win) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
+      before do
+        allow(board).to receive(:win?).and_return(true)
+        allow(game_win).to receive(:win)
+      end
+      it 'returns true' do
+        expect(game_win.game_over?).to be(true)
+      end
+    end
+    context 'when the game is tied' do
+      subject(:game_tie) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
+      before do
+        allow(board).to receive(:win?).and_return(false)
+        allow(board).to receive(:tie?).and_return(true)
+        allow(game_tie).to receive(:tie)
+      end
+      it 'returns true' do
+        expect(game_tie.game_over?).to be(true)
+      end
+    end
+    context 'when the game is not over' do
+      subject(:mid_game) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
+      before do
+        allow(board).to receive(:win?).and_return(false)
+        allow(board).to receive(:tie?).and_return(false)
+      end
+      it 'returns true' do
+        expect(mid_game.game_over?).to be(false)
+      end
+    end
+  end
 end
 # rubocop: enable Layout/LineLength, Metrics/BlockLength
