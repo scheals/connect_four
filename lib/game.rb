@@ -47,16 +47,6 @@ class Game
     which_column
   end
 
-  def win
-    board.show
-    puts "You did it #{current_player.name}! You won!"
-  end
-
-  def tie
-    board.show
-    puts 'That was a long one! You have tied.'
-  end
-
   def game_over?
     if board.win?
       win
@@ -67,5 +57,17 @@ class Game
     else
       false
     end
+  end
+
+  private
+
+  def win
+    board.show
+    puts "You did it #{current_player.name}! You won!"
+  end
+
+  def tie
+    board.show
+    puts 'That was a long one! You have tied.'
   end
 end

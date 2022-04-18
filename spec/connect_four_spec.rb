@@ -181,17 +181,26 @@ end
 
 describe Game do
   describe '#make_move' do
-    subject(:game_move) { described_class.new(Player.new('Shohreh', "\u26AB"), Player.new('Setareh', "\u26AA"), Board.new) }
+    subject(:game_move) { described_class.new(player1, player2, board) }
+    let(:player1) { instance_double(Player, name: 'Shohreh', token: "\u26AB") }
+    let(:player2) { instance_double(Player, name: 'Setareh', token: "\u26AA") }
+    let(:board) { instance_double(Board) }
+    before do
+      allow(board).to receive(:drop).with(game_move.current_player.token, 1)
+    end
     it 'places one token' do
       column = 1
-      expect { game_move.make_move(column) }.to change { game_move.board.send(:first_row).first }
+      token = game_move.current_player.token
+      expect(board).to receive(:drop).with(token, column)
+      game_move.make_move(column)
     end
   end
 
   describe '#switch_players' do
-    subject(:game_switch) { described_class.new(player1, player2, Board.new) }
-    let(:player1) { Player.new('Shohreh', "\u26AB") }
-    let(:player2) { Player.new('Setareh', "\u26AA") }
+    subject(:game_switch) { described_class.new(player1, player2, board) }
+    let(:player1) { instance_double(Player, name: 'Shohreh', token: "\u26AB") }
+    let(:player2) { instance_double(Player, name: 'Setareh', token: "\u26AA") }
+    let(:board) { instance_double(Board) }
     before do
       game_switch.instance_variable_set(:@current_player, player2)
     end
@@ -202,12 +211,16 @@ describe Game do
 
   describe '#which_column' do
     context 'when input is valid' do
-      subject(:valid_column) { described_class.new(player1, player2, Board.new) }
-      let(:player1) { Player.new('Jahan', "\u26AB") }
-      let(:player2) { Player.new('Behrouz', "\u26AA") }
+      subject(:valid_column) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
       before do
         allow(valid_column).to receive(:gets).and_return('3')
         allow(valid_column).to receive(:puts)
+        allow(player1).to receive(:name)
+        allow(player1).to receive(:token)
+        allow(board).to receive(:valid_column?).and_return(true)
       end
       it 'returns a number' do
         valid_input = 3
@@ -215,12 +228,16 @@ describe Game do
       end
     end
     context 'when input is invalid twice and then valid' do
-      subject(:input_thrice) { described_class.new(player1, player2, Board.new) }
-      let(:player1) { Player.new('Farid', "\u26AB") }
-      let(:player2) { Player.new('Aftab', "\u26AA") }
+      subject(:input_thrice) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
       before do
         allow(input_thrice).to receive(:gets).and_return('11', '0', '7')
         allow(input_thrice).to receive(:puts).exactly(5).times
+        allow(player1).to receive(:name).thrice
+        allow(player1).to receive(:token).thrice
+        allow(board).to receive(:valid_column?).and_return(false, false, true)
       end
       it 'prints an error to the console twice and ends loop' do
         error_message = 'Column not found or full. Proper columns start at 1 and end at 7.'
@@ -233,15 +250,17 @@ describe Game do
   describe '#game_loop' do
     context 'when the game is won' do
       subject(:game_won) { described_class.new(player1, player2, board) }
-      let(:player1) { Player.new('Anahita', "\u26AB") }
-      let(:player2) { Player.new('Farahnaz', "\u26AA") }
-      let(:board) { Board.new }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
       before do
         allow(board).to receive(:win?).and_return(true).once
         allow(board).to receive(:show)
         allow(game_won).to receive(:puts)
         allow(game_won).to receive(:make_move)
         allow(game_won).to receive(:which_column)
+        allow(player1).to receive(:name).and_return('Anahita')
+        allow(player2).to receive(:name).and_return('Farahnaz')
       end
       it 'stops and displays a message' do
         congratulations = "You did it #{game_won.current_player.name}! You won!"
@@ -251,20 +270,66 @@ describe Game do
     end
     context 'when the game is tied' do
       subject(:game_tied) { described_class.new(player1, player2, board) }
-      let(:player1) { Player.new('Anahita', "\u26AB") }
-      let(:player2) { Player.new('Farahnaz', "\u26AA") }
-      let(:board) { Board.new }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
       before do
         allow(board).to receive(:tie?).and_return(true).once
+        allow(board).to receive(:win?).and_return(false).once
         allow(board).to receive(:show)
         allow(game_tied).to receive(:puts)
         allow(game_tied).to receive(:make_move)
         allow(game_tied).to receive(:which_column)
+        allow(player1).to receive(:name).and_return('Sadie')
+        allow(player2).to receive(:name).and_return('Hugh')
       end
       it 'stops and displays a message' do
         message = 'That was a long one! You have tied.'
         expect(game_tied).to receive(:puts).with(message).once
         game_tied.game_loop
+      end
+    end
+  end
+
+  describe '#game_over?' do
+    context 'when the game is won' do
+      subject(:game_win) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
+      before do
+        allow(board).to receive(:win?).and_return(true)
+        allow(game_win).to receive(:win)
+      end
+      it 'returns true' do
+        expect(game_win.game_over?).to be(true)
+      end
+    end
+    context 'when the game is tied' do
+      subject(:game_tie) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
+      before do
+        allow(board).to receive(:win?).and_return(false)
+        allow(board).to receive(:tie?).and_return(true)
+        allow(game_tie).to receive(:tie)
+      end
+      it 'returns true' do
+        expect(game_tie.game_over?).to be(true)
+      end
+    end
+    context 'when the game is not over' do
+      subject(:mid_game) { described_class.new(player1, player2, board) }
+      let(:player1) { instance_double(Player) }
+      let(:player2) { instance_double(Player) }
+      let(:board) { instance_double(Board) }
+      before do
+        allow(board).to receive(:win?).and_return(false)
+        allow(board).to receive(:tie?).and_return(false)
+      end
+      it 'returns true' do
+        expect(mid_game.game_over?).to be(false)
       end
     end
   end
