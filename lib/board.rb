@@ -8,7 +8,7 @@ class Board
     @board = Array.new(6) { Array.new(7) { '  ' } }
   end
 
- # rubocop: disable Metrics/AbcSize
+  # rubocop: disable Metrics/AbcSize
   def show
     puts <<-HEREDOC
        1     2     3     4     5     6     7
@@ -23,7 +23,7 @@ class Board
 
     HEREDOC
   end
- # rubocop: enable Metrics/AbcSize
+  # rubocop: enable Metrics/AbcSize
 
   def drop(token, column)
     target_column = find_column(column)
@@ -58,7 +58,7 @@ class Board
   end
 
   def full?(column)
-    return true if topmost_token(find_column(column)) == 0
+    return true if topmost_token(find_column(column)).zero?
 
     false
   end
@@ -105,7 +105,7 @@ class Board
     diagonals = []
     next_row = 1
     next_column = index - 1
-    until next_column < 0 || next_row > 5
+    until next_column.negative? || next_row > 5
       diagonals << board[next_row][next_column]
       next_row += 1
       next_column -= 1
@@ -117,7 +117,7 @@ class Board
     diagonals = []
     next_row = 4
     next_column = index + 1
-    until next_column > 6 || next_row < 0
+    until next_column > 6 || next_row.negative?
       diagonals << board[next_row][next_column]
       next_row -= 1
       next_column += 1
@@ -129,7 +129,7 @@ class Board
     diagonals = []
     next_row = 4
     next_column = index - 1
-    until next_column < 0 || next_row < 0
+    until next_column.negative? || next_row.negative?
       diagonals << board[next_row][next_column]
       next_row -= 1
       next_column -= 1
@@ -137,33 +137,31 @@ class Board
     diagonals
   end
 
-  # rubocop: disable Lint/Syntax
   def four_in_a_row?
     case board
-      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
-      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
-      else false
+    in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
+    in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+    else false
     end
   end
 
   def four_in_a_column?
     case board.transpose
-      in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
-      in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
-      else false
+    in [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *] then return true
+    in [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *] then return true
+    else false
     end
   end
 
   def four_in_a_diagonal?
     diagonals = create_diagonals
     case diagonals
-      in [*, [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *], *] then return true
-      in [*, [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *], *] then return true
-      else false
+    in [*, [*, [*, "\u26AA", "\u26AA", "\u26AA", "\u26AA", *], *], *] then return true
+    in [*, [*, [*, "\u26AB", "\u26AB", "\u26AB", "\u26AB", *], *], *] then return true
+    else false
     end
     false
-    end
-# rubocop: enable Lint/Syntax
+  end
 
   def first_row
     board[5]
